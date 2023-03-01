@@ -8,6 +8,7 @@ import com.ptit.springbootdepartmentstore.entity.Address;
 import com.ptit.springbootdepartmentstore.entity.User;
 
 public interface AddressRepository extends JpaRepository<Address, Integer> {
+
 	public List<Address> findByUser(User user);
 
 }
