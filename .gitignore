@@ -1,1 +1,7 @@
 /.metadata/
+spring-boot-ecommerce/.classpath
+spring-boot-ecommerce/.project
+spring-boot-ecommerce/.settings/org.eclipse.core.resources.prefs
+spring-boot-ecommerce/.settings/org.eclipse.jdt.core.prefs
+spring-boot-ecommerce/.settings/org.eclipse.m2e.core.prefs
+spring-boot-ecommerce/.settings/org.springframework.ide.eclipse.prefs
