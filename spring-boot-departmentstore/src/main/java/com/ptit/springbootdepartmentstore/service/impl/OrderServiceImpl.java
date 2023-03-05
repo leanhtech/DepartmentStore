@@ -11,7 +11,6 @@ import com.ptit.springbootdepartmentstore.dto.response.ActionStatus;
 import com.ptit.springbootdepartmentstore.dto.response.OrderInList;
 import com.ptit.springbootdepartmentstore.dto.response.ResponseOrderList;
 import com.ptit.springbootdepartmentstore.entity.Orders;
-import com.ptit.springbootdepartmentstore.repository.OrderDetailRepository;
 import com.ptit.springbootdepartmentstore.repository.OrderRepository;
 import com.ptit.springbootdepartmentstore.service.OrderService;
 
@@ -20,9 +19,6 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	private OrderRepository orderRepository;
-	
-	@Autowired
-	private OrderDetailRepository orderDetailRepository;
 	
 	@Override
 	public OrderInList convertOrder (Orders order) {
@@ -51,4 +47,5 @@ public class OrderServiceImpl implements OrderService {
 		responseOrderList.setOrderInList(orderInList);
 		return responseOrderList;
 	}
+
 }

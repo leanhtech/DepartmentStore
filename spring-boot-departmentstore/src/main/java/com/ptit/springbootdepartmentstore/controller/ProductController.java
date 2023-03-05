@@ -1,26 +1,35 @@
 package com.ptit.springbootdepartmentstore.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptit.springbootdepartmentstore.dto.response.ProductDto;
+import com.ptit.springbootdepartmentstore.entity.Product;
+import com.ptit.springbootdepartmentstore.service.ProductService;
+
 
 @RestController
-@RequestMapping("/apiproduct")
+@RequestMapping("/api/product")
 public class ProductController {
 	
 	Logger logger = LoggerFactory.getLogger(ProductController.class);
-	/*
-	 * Not Done
+	
 	@Autowired
 	private ProductService productService;
 	
-	@GetMapping("/getallproduct")
-	public List<Product> GetAllProduct(){
+	@GetMapping("/all")
+	public List<ProductDto> GetAllProduct(){
 		return productService.getAllProduct();
 	}
 	
+	/*
+	 * Not Done
 	@GetMapping("/getimage/{productId}")
 	public List<Image> GetImage(@PathVariable int productId){
 		return productService.getImageProductByID(productId);

@@ -1,20 +1,22 @@
 package com.ptit.springbootdepartmentstore.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
 @Entity
 @Data
+
 public class Product {
 
 	@Id
@@ -49,14 +51,16 @@ public class Product {
     @Column(name = "quantity")
     private Integer quantity;
     
-    @ManyToOne
-	@JoinColumn(name="category_id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="brand_id", nullable=false)
     private Brand brand;
-    
-    @OneToMany(mappedBy = "product")
-	private List<Image> imageList;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "product")
+//	private List<Image> imageList;
 }
