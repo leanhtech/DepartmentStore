@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 
@@ -25,6 +27,7 @@ public class Image {
     @Column(name="status")
     private String status;
     
+    @JsonIgnore
     @ManyToOne
 	@JoinColumn(name="product_id", nullable=false)
     private Product product;

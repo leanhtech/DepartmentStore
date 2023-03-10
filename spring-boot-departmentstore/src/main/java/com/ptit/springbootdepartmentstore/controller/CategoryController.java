@@ -6,12 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptit.springbootdepartmentstore.dto.response.ProductListDto;
 import com.ptit.springbootdepartmentstore.entity.Category;
-import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.service.CategoryService;
 
 
@@ -26,12 +25,12 @@ public class CategoryController {
 	
 	@GetMapping("/all")
 	public List<Category> findAllCategory(){
-		return categoryService.getCategorys();
+		return categoryService.getCategory();
 	}
 	
-	@GetMapping("/{id}")
-	public List<Product> AddCategory(@PathVariable("id") int categoryId) {
-		return categoryService.getProductsOfCategory(categoryId);
+	@GetMapping("/product/all")
+	public List<ProductListDto> getAllCategoryWithProduct() {
+		return categoryService.getCategoryWithProduct();
 	}
 	
 	/*

@@ -26,7 +26,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 	
 //	private final Path storageFolder = Paths.get("D:\\Documents\\Web\\backend\\spring-boot-departmentstore\\src\\main\\resources\\images");
 	
-	private final Path storageFolder = Paths.get(".\\src\\main\\resources\\images");
+//	private final Path storageFolder = Paths.get(".\\src\\main\\resources\\images");
+
+	private final Path storageFolder = Paths.get(".WEB-INF\\classes\\images");
+	
 	
 	public ImageStorageServiceImpl() {
 		try {
@@ -35,6 +38,8 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 		} catch (Exception e) {
 			throw new RuntimeException("Can not initialize storage", e);
 		}
+		logger.info("before print path");
+		logger.info(storageFolder.toString());
 	}
 	
 	private boolean isImageFile(MultipartFile file) {
@@ -54,8 +59,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 				throw new RuntimeException("You can only upload image file");
 			}
 			// file must be <= 5mb
-			float fileSizeInMegabytes = file.getSize() / 1_000_000.0f;
-			
+			// file.getSize return bytes)
+			float fileSizeInMegabytes = file.getSize() / 1048576.0f;
+			System.out.println(file.getSize());
 			if (fileSizeInMegabytes > 5.0f) {
 				throw new RuntimeException("File must be <= 5Mb");
 			}
@@ -82,6 +88,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
 	@Override
 	public byte[] readFileContent(String fileName) {
+		
 		try {
 			Path file = storageFolder.resolve(fileName);
 			UrlResource resource = new UrlResource(file.toUri());
