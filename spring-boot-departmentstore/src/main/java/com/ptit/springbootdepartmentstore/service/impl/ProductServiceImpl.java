@@ -12,6 +12,8 @@ import com.ptit.springbootdepartmentstore.dto.response.ProductDto;
 import com.ptit.springbootdepartmentstore.entity.Brand;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
+import com.ptit.springbootdepartmentstore.service.BrandService;
+import com.ptit.springbootdepartmentstore.service.CategoryService;
 import com.ptit.springbootdepartmentstore.service.ProductService;
 
 
@@ -20,6 +22,12 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	ProductRepository productRepository;
+	
+	@Autowired
+	CategoryService categoryService;
+	
+	@Autowired
+	BrandService brandService;
 	
 	Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -39,8 +47,6 @@ public class ProductServiceImpl implements ProductService {
 			productDto.setDiscount(product.getDiscount());
 			productDto.setSold(product.getSold());
 			product.setQuantity(product.getQuantity());
-			productDto.setCategory(product.getCategory());
-//			product.setBrand(product.getBrand());
 			result.add(productDto);
 		}
 		return result;

@@ -1,7 +1,6 @@
 package com.ptit.springbootdepartmentstore.dto.response;
 
-import com.ptit.springbootdepartmentstore.entity.Brand;
-import com.ptit.springbootdepartmentstore.entity.Category;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +34,6 @@ public class ProductDto {
 	
 	private Integer quantity;
 	
-	private String image;
+	private List<String> image;
 	
-	private Brand brand;
-	
-	private Category category;
 }

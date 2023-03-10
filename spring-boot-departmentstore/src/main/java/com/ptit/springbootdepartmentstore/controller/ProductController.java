@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ptit.springbootdepartmentstore.dto.response.ProductDto;
-import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.service.ProductService;
 
 
@@ -28,13 +27,14 @@ public class ProductController {
 		return productService.getAllProduct();
 	}
 	
+	
+//	@GetMapping("/getimage/{productId}")
+//	public List<ProductListDto> GetImage(@PathVariable int productId){
+//		return productService.getImageProductByID(productId);
+//	}
+	
 	/*
 	 * Not Done
-	@GetMapping("/getimage/{productId}")
-	public List<Image> GetImage(@PathVariable int productId){
-		return productService.getImageProductByID(productId);
-	}
-	
 	@GetMapping("/findbyid/{id}")
 	public Product FindByName(@PathVariable int id) {
 		return productService.findById(id);
