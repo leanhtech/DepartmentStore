@@ -1,107 +1,56 @@
 package com.ptit.springbootdepartmentstore.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.UrlResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ptit.springbootdepartmentstore.common.Constant;
+import com.ptit.springbootdepartmentstore.dto.response.FileUploadDto;
+import com.ptit.springbootdepartmentstore.entity.Image;
+import com.ptit.springbootdepartmentstore.entity.Product;
+import com.ptit.springbootdepartmentstore.repository.ImageRepository;
+import com.ptit.springbootdepartmentstore.service.FileService;
 import com.ptit.springbootdepartmentstore.service.ImageStorageService;
+import com.ptit.springbootdepartmentstore.service.ProductService;
 
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 	
+	@Autowired
+	ProductService productService;
+	
+	@Autowired
+	ImageRepository imageRepository;
+	
+	@Autowired
+	FileService fileService;
+	
 	Logger logger = LoggerFactory.getLogger(ImageStorageServiceImpl.class);
-	
-//	private final Path storageFolder = Paths.get("D:\\Documents\\Web\\backend\\spring-boot-departmentstore\\src\\main\\resources\\images");
-	
-//	private final Path storageFolder = Paths.get(".\\src\\main\\resources\\images");
-
-	private final Path storageFolder = Paths.get(".WEB-INF\\classes\\images");
-	
-	
-	public ImageStorageServiceImpl() {
-		try {
-			Files.createDirectories(storageFolder);
-			logger.info(storageFolder.toString());
-		} catch (Exception e) {
-			throw new RuntimeException("Can not initialize storage", e);
-		}
-		logger.info("before print path");
-		logger.info(storageFolder.toString());
-	}
-	
-	private boolean isImageFile(MultipartFile file) {
-		String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-		return Arrays.asList(new String[] {"png", "jpg", "jpeg", "bmp"})
-				.contains(fileExtension.trim().toLowerCase());
-	}
 
 	@Override
-	public String storeFile(MultipartFile file) {
+	public Boolean saveProductImage(MultipartFile[] imageFiles, int productId) {
 		try {
-			if (file.isEmpty()) {
-				throw new RuntimeException("Failed to store empty file");
+			List<FileUploadDto> fileName = fileService.uploadFiles(imageFiles);
+			Product product = productService.getProductById(productId);
+			List<Image> imagesResult = new ArrayList<>();
+			for (FileUploadDto file : fileName) {
+				Image image = new Image();
+				image.setImageUrl(file.getFileUrl());
+				image.setStatus(Constant.TRUE_STRING);
+				image.setProduct(product);
+				imagesResult.add(image);
 			}
-			// check is image file
-			if(!isImageFile(file)) {
-				throw new RuntimeException("You can only upload image file");
-			}
-			// file must be <= 5mb
-			// file.getSize return bytes)
-			float fileSizeInMegabytes = file.getSize() / 1048576.0f;
-			System.out.println(file.getSize());
-			if (fileSizeInMegabytes > 5.0f) {
-				throw new RuntimeException("File must be <= 5Mb");
-			}
-			// file must be rename, except file duplicate
-			String fileExtexsion = FilenameUtils.getExtension(file.getOriginalFilename());
-			String generateFileName = UUID.randomUUID().toString().replace("-", "");
-			generateFileName = generateFileName + "." + fileExtexsion;
-			Path destinationFilePath = this.storageFolder.resolve(Paths.get(generateFileName)).normalize().toAbsolutePath();
-			logger.info(destinationFilePath.getParent().toString());
-			logger.info(this.storageFolder.toRealPath().toString());
-			if (!destinationFilePath.getParent().equals(this.storageFolder.toRealPath())) {
-				throw new RuntimeException("Can not store file outside current directory");
-			}
-			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
-			} 
-			
-			return generateFileName;
-			
+			imageRepository.saveAll(imagesResult);
 		} catch (Exception e) {
-			throw new RuntimeException("Failed to store file");
+			logger.error(e.toString());
+			return false;
 		}
-	}
-
-	@Override
-	public byte[] readFileContent(String fileName) {
-		
-		try {
-			Path file = storageFolder.resolve(fileName);
-			UrlResource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				byte[] bytes = StreamUtils.copyToByteArray(resource.getInputStream());
-				return bytes;
-			} else {
-				throw new RuntimeException("Could not read file" + fileName);
-			}
-			
-		} catch (IOException e) {
-			throw new RuntimeException("Could not read file" + fileName, e);
-		}
+		return true;
 	}
 
 }

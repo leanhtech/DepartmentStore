@@ -65,8 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 			List<Image> images = product.getImageList();
 			List<String> imgResult = new ArrayList<>();
 			for (Image img : images) {
-				String imgConverted = Utility.convertToImageUrl(img.getImageUrl());
-				imgResult.add(imgConverted);
+				imgResult.add(img.getImageUrl());
 			}
 			productDto.setImage(imgResult);
 			result.add(productDto);
