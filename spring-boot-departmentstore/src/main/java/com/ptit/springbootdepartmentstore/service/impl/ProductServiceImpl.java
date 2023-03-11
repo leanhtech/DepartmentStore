@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ptit.springbootdepartmentstore.dto.request.ProductRequest;
 import com.ptit.springbootdepartmentstore.dto.response.ProductDto;
 import com.ptit.springbootdepartmentstore.entity.Brand;
+import com.ptit.springbootdepartmentstore.entity.Image;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 import com.ptit.springbootdepartmentstore.service.BrandService;
@@ -47,14 +49,32 @@ public class ProductServiceImpl implements ProductService {
 			productDto.setDiscount(product.getDiscount());
 			productDto.setSold(product.getSold());
 			product.setQuantity(product.getQuantity());
+			List<Image> images = product.getImageList();
+			List<String> imgResult = new ArrayList<>();
+			for (Image img : images) {
+				imgResult.add(img.getImageUrl());
+			}
+			productDto.setImage(imgResult);
 			result.add(productDto);
 		}
 		return result;
 	}
 
 	@Override
+	public Product getProductById(int id) {
+		return productRepository.findById(id).orElse(null);
+	}
+
+	@Override
 	public Brand getBrandProduct(Product product) {
 		return product.getBrand();
+	}
+	
+	@Override
+	public Product addProduct(ProductRequest productRequest) {
+		Product product = new Product();
+		
+		return product;
 	}
 	
 }
