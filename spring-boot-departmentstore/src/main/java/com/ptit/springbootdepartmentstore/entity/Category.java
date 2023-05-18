@@ -25,24 +25,23 @@ import lombok.Setter;
 public class Category {
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="category_id", nullable = false)
-    private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "category_id", nullable = false)
+	private Integer id;
 
-    @Column(name="category_name")
-    private String categoryName;
-    
-    @Column(name="status")
-    private String status;
-    
-    @Column(name = "image")
-    private String image;
-    
-    @Column(name = "note")
-    private String note;
+	@Column(name = "name", nullable = false)
+	private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Product> productList;
+	@Column(name = "status")
+	private String status;
 
+	@Column(name = "image")
+	private String image;
+
+	@Column(name = "note")
+	private String note;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+	private List<Product> productList;
 }

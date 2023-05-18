@@ -19,42 +19,41 @@ import lombok.Data;
 public class User {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id", nullable=false)
-    private Integer id;
-	
-	@Column(name="user_name", nullable=false, unique=true)
-    private String userName;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Integer id;
+
+	@Column(name = "name", nullable = false, unique = true)
+	private String name;
+
 	@Column(name = "password", nullable = false)
-    private String password;
+	private String password;
 
-    @Column(name = "first_name")
-    private String firstName;
-    
-    @Column(name = "last_name")
-    private String lastName;
+	@Column(name = "first_name")
+	private String firstName;
 
-    @Column(name = "image")
-    private String image;
-    
-    @Column(name = "email")
-    private String email;
-    
-    @Column(name = "phone")
-    private String phone;
-    
-    @Column(name = "created_at")
-    private Date createDate;
+	@Column(name = "last_name")
+	private String lastName;
 
-    @Column(name="status")
-    private String status;
-    
-    @OneToMany(mappedBy = "user")
-    private List<Address> addressList;
-    
-    @ManyToOne
-    @JoinColumn(name="permission_id", nullable=false)
-    private Permission permission;
-    
+	@Column(name = "image")
+	private String image;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "phone")
+	private String phone;
+
+	@Column(name = "created_at")
+	private Date createDate;
+
+	@Column(name = "status")
+	private String status;
+
+	@OneToMany(mappedBy = "user")
+	private List<Address> addressList;
+
+	@ManyToOne
+	@JoinColumn(name = "permission_id", nullable = false)
+	private Permission permission;
 }
