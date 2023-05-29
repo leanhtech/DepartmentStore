@@ -1,7 +1,6 @@
 package com.ptit.springbootdepartmentstore.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -13,6 +12,7 @@ import com.ptit.springbootdepartmentstore.dto.ProductDTO;
 import com.ptit.springbootdepartmentstore.entity.Brand;
 import com.ptit.springbootdepartmentstore.entity.Category;
 import com.ptit.springbootdepartmentstore.entity.Product;
+import com.ptit.springbootdepartmentstore.mapper.ProductMapper;
 import com.ptit.springbootdepartmentstore.repository.BrandRepository;
 import com.ptit.springbootdepartmentstore.repository.CategoryRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
@@ -21,94 +21,65 @@ import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 public class ProductService {
 
 	@Autowired
-	ProductRepository productRepository;
+	private ProductRepository productRepository;
 
 	@Autowired
-	BrandService brandService;
+	private BrandRepository brandRepository;
 
 	@Autowired
-	CategoryService categoryService;
-
+	private CategoryRepository categoryRepository;
+	
 	@Autowired
-	BrandRepository brandRepository;
-
-	@Autowired
-	CategoryRepository categoryRepository;
-
-	public ProductDTO convertToProductDTO(Product product) {
-		return new ProductDTO(product.getId(), product.getProductDescription(), product.getProductName(),
-				product.getStatus(), product.getPrice(), product.getSpecification(), product.getCalculationUnit(),
-				product.getDiscount(), product.getSold(), product.getQuantity(),
-				brandService.getBrand(product.getBrand().getId()),
-				categoryService.getCategory(product.getCategory().getId()));
-	}
-
-	public List<ProductDTO> convertToListProductDTO(List<Product> products) {
-		return products.stream().map(this::convertToProductDTO).collect(Collectors.toList());
-	}
-
-	public Product convertToProduct(ProductDTO productDTO) {
-		Product product = new Product();
-		product.setProductDescription(productDTO.getProductDescription());
-		product.setProductName(productDTO.getProductName());
-		product.setStatus(productDTO.getStatus());
-		product.setPrice(productDTO.getPrice());
-		product.setSpecification(productDTO.getSpecification());
-		product.setCalculationUnit(productDTO.getCalculationUnit());
-		product.setDiscount(productDTO.getDiscount());
-		product.setSold(productDTO.getSold());
-		product.setQuantity(productDTO.getQuantity());
-		product.setBrand(brandRepository.findById(productDTO.getBrand().getId())
-				.orElseThrow(() -> new EntityNotFoundException("Brand not found")));
-		product.setCategory(categoryRepository.findById(productDTO.getCategory().getId())
-				.orElseThrow(() -> new EntityNotFoundException("Category not found")));
-		return product;
-	}
+	private ProductMapper productMapper;
 
 	public List<ProductDTO> getAllProducts() {
-		return convertToListProductDTO(productRepository.findAll());
+		return productMapper.toListDTO(productRepository.findAll());
 	}
 
 	public ProductDTO getProduct(int id) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
-		return convertToProductDTO(product);
+		return productMapper.toDTO(product);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public ProductDTO createProduct(ProductDTO productDTO) {
-		Product product = convertToProduct(productDTO);
+//		productDTO.setId(null);
+//		if (productDTO.getImage() == "") {
+//			productDTO.setImage("https://w7.pngwing.com/pngs/470/493/png-transparent-new-product-development-sales-industry-business-new-product-text-label-service.png");
+//		}
+		
+		Product product = productMapper.toEntity(productDTO);
 		Product savedProduct = productRepository.save(product);
-		return convertToProductDTO(savedProduct);
+		return productMapper.toDTO(savedProduct);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public ProductDTO updateProduct(ProductDTO productDTO) {
 		Product product = productRepository.findById(productDTO.getId())
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
-		product = convertToProduct(productDTO);
+		product = productMapper.toEntity(productDTO);
 		Product savedProduct = productRepository.save(product);
-		return convertToProductDTO(savedProduct);
+		return productMapper.toDTO(savedProduct);
 	}
-// @Transactional(rollbackOn = Exception.class)
-// public void deleteProduct(int id) {
-// Product product = productRepository.findById(id)
-// .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-// if (!product.getOrderDetails().isEmpty()) {
-// throw new RuntimeException("Product has orders and cannot be deleted");
-// }
-// productRepository.delete(product);
-// }
+
+	@Transactional(rollbackOn = Exception.class)
+	public void deleteProduct(int id) {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
+		productRepository.delete(product);
+	}
 
 
 	public List<ProductDTO> getProductListInBrand(int id) {
-		Brand brand = brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Brand not found"));
-		return convertToListProductDTO(brand.getProductList());
+		Brand brand = brandRepository.findById(id)
+						.orElseThrow(() -> new EntityNotFoundException("Brand not found"));
+		return productMapper.toListDTO(brand.getProductList());
 	}
 
 	public List<ProductDTO> getProductListInCategory(Integer categoryId) {
 		Category category = categoryRepository.findById(categoryId)
-				.orElseThrow(() -> new EntityNotFoundException("Category not found"));
-		return convertToListProductDTO(category.getProductList());
+								.orElseThrow(() -> new EntityNotFoundException("Category not found"));
+		return productMapper.toListDTO(category.getProductList());
 	}
 }

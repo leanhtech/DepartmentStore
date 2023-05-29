@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,7 +37,7 @@ public class Category {
 	private String status;
 
 	@Column(name = "image")
-	private String image;
+	private String imageBase64;
 
 	@Column(name = "note")
 	private String note;

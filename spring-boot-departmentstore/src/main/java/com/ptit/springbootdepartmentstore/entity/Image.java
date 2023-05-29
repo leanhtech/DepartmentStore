@@ -1,31 +1,26 @@
 package com.ptit.springbootdepartmentstore.entity;
 
+import java.sql.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import lombok.Data;
-
 
 @Entity
 @Data
 public class Image {
+	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="image_id", nullable=false)
-    private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Integer id;
 
-    @Column(name="image_url", nullable=false)
-    private String imageUrl;
+	@Column(name = "user_name", nullable = false)
+	private String imageBase64;
 
-    @Column(name="status")
-    private String status;
-    
-    @ManyToOne
-	@JoinColumn(name="product_id", nullable=false)
-    private Product product;
 }
