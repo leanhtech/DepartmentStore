@@ -38,4 +38,6 @@ public class ProductDTO {
 	private Integer brandId;
 
 	private Integer categoryId;
+	
+	private String imageBase64;
 }

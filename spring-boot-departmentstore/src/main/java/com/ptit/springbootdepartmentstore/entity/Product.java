@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -62,6 +63,10 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="brand_id", nullable=false)
     private Brand brand;
+    
+    @Column(name = "image_byte")
+	@Lob
+	private byte[] imageByte;
 
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "product")

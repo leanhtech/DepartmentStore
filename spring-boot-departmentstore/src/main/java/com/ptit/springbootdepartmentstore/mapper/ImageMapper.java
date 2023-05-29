@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.ImageDTO;
 import com.ptit.springbootdepartmentstore.entity.Image;
+import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component
 public class ImageMapper {
@@ -12,7 +13,7 @@ public class ImageMapper {
 		
 		ImageDTO imageDTO = new ImageDTO();
 		imageDTO.setId(image.getId());
-		imageDTO.setImageBase64(image.getImageBase64());
+		imageDTO.setImageBase64(ImageRepository.generateImageUrl(image.getImageByte()));
 		return imageDTO;
 		
 	} 
@@ -21,7 +22,7 @@ public class ImageMapper {
 		
 		Image image = new Image();
 		image.setId(imageDTO.getId());
-		image.setImageBase64(imageDTO.getImageBase64());
+		image.setImageByte(ImageRepository.decodeImageUrl(imageDTO.getImageBase64()));
 		return image;
 		
 	}

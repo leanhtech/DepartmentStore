@@ -52,14 +52,18 @@ public class UserMapper {
 			userDTO.setAddressIds(listIdAddress);
 		}
 		userDTO.setPermissionId(user.getPermission().getId());
-		userDTO.setImageId(user.getImage().getId());
+		if (user.getImage() != null)
+			userDTO.setImageId(user.getImage().getId());
+		if(user.getImageByte() != null)
+			userDTO.setImageBase64(ImageRepository.generateImageUrl(user.getImageByte()));
 //		userDTO.setAvatarUrl(generateAvatarUrl(user.getAvatar()));
 		return userDTO;
 	}
 
 	public User toEntity(UserDTO userDTO) {
 		User user = new User();
-		user.setId(userDTO.getId());
+		if(userDTO.getId() != null)
+			user.setId(userDTO.getId());
 		user.setName(userDTO.getUserName());
 		user.setPassword(userDTO.getPassword());
 		user.setFirstName(userDTO.getFirstName());
@@ -81,12 +85,15 @@ public class UserMapper {
 		if (userDTO.getPermissionId() != null)
 			user.setPermission(permissionRepository.findById(userDTO.getPermissionId())
 					.orElseThrow(() -> new EntityNotFoundException("Permission not found")));
-		user.setImage(imageRepository.findById(userDTO.getImageId()).orElse(null));
+		if(userDTO.getImageId() != null)
+			user.setImage(imageRepository.findById(userDTO.getImageId()).orElse(null));
 //		else {
 //			String base64Data = userDTO.getAvatarUrl().substring(userDTO.getAvatarUrl().indexOf(",") + 1);
 //			byte[] imageData = Base64.getDecoder().decode(base64Data);
 //			user.setAvatar(imageData);
 //		}
+		if(userDTO.getImageBase64() != null)
+			user.setImageByte(ImageRepository.decodeImageUrl(userDTO.getImageBase64()));
 		return user;
 	}
 

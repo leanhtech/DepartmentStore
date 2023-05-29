@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.CategoryDTO;
 import com.ptit.springbootdepartmentstore.entity.Category;
+import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component
 public class CategoryMapper {
@@ -24,7 +25,8 @@ public class CategoryMapper {
 		categoryDTO.setId(category.getId());
 		categoryDTO.setName(category.getName());
 		categoryDTO.setNote(category.getNote());
-		categoryDTO.setImageBase64(category.getImageBase64());
+		if(category.getImageByte() != null)
+			categoryDTO.setImageBase64(ImageRepository.generateImageUrl(category.getImageByte()));
 //		if(category.getImage() != null)
 //			categoryDTO.setImageUrl(generateAvatarUrl(category.getImage()));
 		return categoryDTO;
@@ -35,7 +37,7 @@ public class CategoryMapper {
 		category.setId(categoryDTO.getId());
 		category.setName(categoryDTO.getName());
 		category.setNote(categoryDTO.getNote());
-		category.setImageBase64(category.getImageBase64());
+		category.setImageByte(ImageRepository.decodeImageUrl(categoryDTO.getImageBase64()));
 		return category;
 	}
 	

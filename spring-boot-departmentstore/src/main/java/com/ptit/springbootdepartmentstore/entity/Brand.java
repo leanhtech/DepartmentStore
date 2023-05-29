@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -29,6 +30,10 @@ public class Brand {
 	
 	@Column(name = "description")
 	private String descipttion;
+	
+	@Column(name = "image_byte")
+	@Lob
+	private byte[] imageByte;
 	
 	@OneToOne
 	@JoinColumn(name = "image_id")

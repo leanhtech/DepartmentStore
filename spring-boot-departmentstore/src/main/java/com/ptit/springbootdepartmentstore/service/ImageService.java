@@ -32,7 +32,7 @@ public class ImageService {
     public ImageDTO updateImage(ImageDTO imageDTO) {
         Image entity = imageRepository.findById(imageDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Image with id " + imageDTO.getId() + " not found"));
-        entity.setImageBase64(imageDTO.getImageBase64());
+        entity.setImageByte(ImageRepository.decodeImageUrl(imageDTO.getImageBase64()));
         entity = imageRepository.save(entity);
         return imageMapper.toDTO(entity);
     }

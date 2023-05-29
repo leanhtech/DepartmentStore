@@ -60,4 +60,8 @@ public class User {
 	@OneToOne
 	@JoinColumn(name = "image_id")
     private Image image;
+	
+	@Column(name = "image_byte")
+	@Lob
+	private byte[] imageByte;
 }

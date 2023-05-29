@@ -20,7 +20,9 @@ public class BrandMapper {
 		BrandDTO brandDTO = new BrandDTO();
 		brandDTO.setId(brand.getId());
 		brandDTO.setName(brand.getName());
-		brandDTO.setImageId(brand.getImage().getId());
+		brandDTO.setImageBase64(ImageRepository.generateImageUrl(brand.getImageByte()));
+		if(brand.getImage() != null)
+			brandDTO.setImageId(brand.getImage().getId());
 		brandDTO.setDescipttion(brand.getDescipttion());
 		return brandDTO;
 	}
@@ -29,7 +31,9 @@ public class BrandMapper {
 		Brand brand = new Brand();
 		brand.setId(brandDTO.getId());
 		brand.setName(brandDTO.getName());
-		brand.setImage(imageRepository.findById(brandDTO.getImageId()).orElse(null));
+		brand.setImageByte(ImageRepository.decodeImageUrl(brandDTO.getImageBase64()));
+		if(brandDTO.getImageId() != null)
+			brand.setImage(imageRepository.findById(brandDTO.getImageId()).orElse(null));
 		brand.setDescipttion(brandDTO.getDescipttion());
 		return brand;
 	}

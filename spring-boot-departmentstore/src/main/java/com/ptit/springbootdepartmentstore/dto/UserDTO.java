@@ -35,4 +35,6 @@ public class UserDTO {
 	private List<Integer> addressIds;
 
 	private Integer permissionId;
+	
+	private String imageBase64;
 }

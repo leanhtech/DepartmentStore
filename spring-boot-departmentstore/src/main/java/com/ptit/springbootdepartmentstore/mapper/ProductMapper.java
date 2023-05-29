@@ -45,8 +45,12 @@ public class ProductMapper {
 			}
 			productDTO.setImageIds(imageIds);
 		}
-		productDTO.setCategoryId(product.getCategory().getId());
-		productDTO.setBrandId(product.getBrand().getId());
+		if(product.getCategory() != null)
+			productDTO.setCategoryId(product.getCategory().getId());
+		if(product.getBrand() != null)
+			productDTO.setBrandId(product.getBrand().getId());
+		if(product.getImageByte() != null)
+			productDTO.setImageBase64(ImageRepository.generateImageUrl(product.getImageByte()));
 		return productDTO;
 	}
 	
@@ -64,8 +68,12 @@ public class ProductMapper {
 		product.setQuantity(productDTO.getQuantity());
 		if(productDTO.getImageIds() != null)
 			product.setImageList(imageRepository.findAllById(productDTO.getImageIds()));
-		product.setCategory(categoryRepository.findById(productDTO.getCategoryId()).orElse(null));
-		product.setBrand(brandRepository.findById(productDTO.getBrandId()).orElse(null));
+		if(productDTO.getCategoryId() != null)
+			product.setCategory(categoryRepository.findById(productDTO.getCategoryId()).orElse(null));
+		if(productDTO.getBrandId() != null)
+			product.setBrand(brandRepository.findById(productDTO.getBrandId()).orElse(null));
+		if(productDTO.getImageBase64() != null)
+			product.setImageByte(ImageRepository.decodeImageUrl(productDTO.getImageBase64()));
 		return product;
 	}
 	

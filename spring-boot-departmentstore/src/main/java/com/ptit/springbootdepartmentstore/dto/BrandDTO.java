@@ -13,6 +13,8 @@ public class BrandDTO {
 
 	private String name;
 	
+	private String imageBase64;
+	
 	private Integer imageId;
 
 	private String descipttion;
