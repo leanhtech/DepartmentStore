@@ -3,6 +3,7 @@ package com.ptit.springbootdepartmentstore.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.CartDTO;
@@ -13,11 +14,14 @@ import com.ptit.springbootdepartmentstore.entity.User;
 
 @Component
 public class CartMapper {
+	
+	@Autowired
+	private ProductMapper productMapper;
 
     public CartDTO toDTO(Cart cart) {
         CartDTO cartDTO = new CartDTO();
         cartDTO.setUserId(cart.getId().getUser().getId());
-        cartDTO.setProductId(cart.getId().getProduct().getId());
+        cartDTO.setProduct(productMapper.toDTO(cart.getId().getProduct()));
         cartDTO.setQuantity(cart.getQuantity());
         return cartDTO;
     }

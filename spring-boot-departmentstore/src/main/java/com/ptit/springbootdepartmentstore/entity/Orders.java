@@ -3,6 +3,7 @@ package com.ptit.springbootdepartmentstore.entity;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,6 +40,6 @@ public class Orders {
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	
-    @OneToMany(mappedBy = "id.order")
+    @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderDetail> orderDetailList;
 }

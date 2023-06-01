@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.UserDTO;
+import com.ptit.springbootdepartmentstore.dto.UserMobileDTO;
 import com.ptit.springbootdepartmentstore.entity.User;
 import com.ptit.springbootdepartmentstore.mapper.UserMapper;
+import com.ptit.springbootdepartmentstore.mapper.UserMobileMapper;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
 
 @Service
@@ -21,10 +23,18 @@ public class UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private UserMobileMapper userMobileMapper;
 
 	public List<UserDTO> getAllUser() {
 		List<User> users = userRepository.findAll();
 		return userMapper.toListDTO(users);
+	}
+	
+	public List<UserMobileDTO> getAllMobileUser() {
+		List<User> users = userRepository.findAll();
+		return userMobileMapper.toListDTO(users);
 	}
 
 	public UserDTO getUser(int id) {
@@ -38,6 +48,14 @@ public class UserService {
 		User savedUser = userRepository.save(user);
 		System.out.println(savedUser.getId());
 		return userMapper.toDTO(savedUser);
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public UserMobileDTO createUserMobile(UserMobileDTO userDTO) {
+		User user = userMobileMapper.toEntity(userDTO);
+		User savedUser = userRepository.save(user);
+		System.out.println(savedUser.getId());
+		return userMobileMapper.toDTO(savedUser);
 	}
 
 	@Transactional(rollbackOn = Exception.class)

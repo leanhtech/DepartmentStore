@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ptit.springbootdepartmentstore.dto.UserDTO;
+import com.ptit.springbootdepartmentstore.dto.UserMobileDTO;
 import com.ptit.springbootdepartmentstore.service.UserService;
 
 @RestController
@@ -32,6 +33,11 @@ public class UserController {
 	public List<UserDTO> getAllUsers() {
 		return userService.getAllUser();
 	}
+	
+	@GetMapping("/mobile")
+	public List<UserMobileDTO> getAllMobileUsers() {
+		return userService.getAllMobileUser();
+	}
 
 	@GetMapping("/{id}")
 	public UserDTO getUserById(@PathVariable int id) {
@@ -41,6 +47,11 @@ public class UserController {
 	@PostMapping("/")
 	public UserDTO createUser(@RequestBody UserDTO userDTO) {
 		return userService.createUser(userDTO);
+	}
+	
+	@PostMapping("/mobile")
+	public UserMobileDTO createMobileUser(@RequestBody UserMobileDTO userDTO) {
+		return userService.createUserMobile(userDTO);
 	}
 
 	@PutMapping("/{id}")

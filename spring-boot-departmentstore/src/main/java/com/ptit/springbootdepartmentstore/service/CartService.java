@@ -11,6 +11,7 @@ import com.ptit.springbootdepartmentstore.entity.CartId;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
 import com.ptit.springbootdepartmentstore.mapper.CartMapper;
+import com.ptit.springbootdepartmentstore.mapper.ProductMapper;
 import com.ptit.springbootdepartmentstore.repository.CartRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
@@ -29,6 +30,9 @@ public class CartService {
 
     @Autowired
     private CartMapper cartMapper;
+    
+    @Autowired
+	private ProductMapper productMapper;
 
     public List<CartDTO> getAllCarts() {
         List<Cart> carts = cartRepository.findAll();
@@ -77,7 +81,7 @@ public class CartService {
             } else {
                 CartDTO cartDTO = new CartDTO();
                 cartDTO.setUserId(userId);
-                cartDTO.setProductId(productId);
+                cartDTO.setProduct(productMapper.toDTO(product));
                 cartDTO.setQuantity(quantity);
                 Cart cart = cartMapper.toEntity(cartDTO, user, product);
                 Cart savedCart = cartRepository.save(cart);

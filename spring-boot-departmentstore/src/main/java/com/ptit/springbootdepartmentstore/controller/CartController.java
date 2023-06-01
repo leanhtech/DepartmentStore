@@ -36,9 +36,9 @@ public class CartController {
 		return cartService.getCartByUserIdAndProductId(userId, productId);
 	}
 
-	@PostMapping("/")
-	public CartDTO addToCart(@RequestBody CartDTO cartDTO) {
-		return cartService.addToCart(cartDTO.getUserId(), cartDTO.getProductId(), cartDTO.getQuantity());
+	@PostMapping("/{userId}/{productId}/{quatily}")
+	public CartDTO addToCart(@PathVariable Integer userId, @PathVariable Integer productId, @PathVariable Integer quatily) {
+		return cartService.addToCart(userId, productId, quatily);
 	}
 
 	@PutMapping("/{userId}/{productId}")

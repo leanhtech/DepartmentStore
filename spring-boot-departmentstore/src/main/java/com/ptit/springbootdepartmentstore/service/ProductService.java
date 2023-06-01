@@ -56,9 +56,11 @@ public class ProductService {
 
 	@Transactional(rollbackOn = Exception.class)
 	public ProductDTO updateProduct(ProductDTO productDTO) {
-		Product product = productRepository.findById(productDTO.getId())
+		Product productOld = productRepository.findById(productDTO.getId())
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
-		product = productMapper.toEntity(productDTO);
+		
+		Product product = productMapper.toEntity(productDTO);
+		product.setImageByte(productOld.getImageByte());
 		Product savedProduct = productRepository.save(product);
 		return productMapper.toDTO(savedProduct);
 	}
@@ -79,7 +81,7 @@ public class ProductService {
 
 	public List<ProductDTO> getProductListInCategory(Integer categoryId) {
 		Category category = categoryRepository.findById(categoryId)
-								.orElseThrow(() -> new EntityNotFoundException("Category not found"));
+								.orElseThrow(() -> new EntityNotFoundException("Category not found in get list Product by Category"));
 		return productMapper.toListDTO(category.getProductList());
 	}
 }

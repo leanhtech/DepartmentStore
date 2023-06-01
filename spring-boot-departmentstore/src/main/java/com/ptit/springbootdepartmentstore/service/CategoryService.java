@@ -26,7 +26,7 @@ public class CategoryService {
 
 	public CategoryDTO getCategory(int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Category not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Category not found in get Category"));
 		return categoryMapper.toDTO(category);
 	}
 
@@ -44,7 +44,7 @@ public class CategoryService {
 	@Transactional(rollbackOn = Exception.class)
 	public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
 		Category category = categoryRepository.findById(categoryDTO.getId())
-				.orElseThrow(() -> new EntityNotFoundException("Category not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Category not found in update Category"));
 		category.setName(categoryDTO.getName());
 		categoryRepository.save(category);
 		return categoryDTO;
