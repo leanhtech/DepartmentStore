@@ -3,6 +3,9 @@ package com.ptit.springbootdepartmentstore.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.OrderDTO;
@@ -12,9 +15,21 @@ import com.ptit.springbootdepartmentstore.entity.OrderDetailId;
 import com.ptit.springbootdepartmentstore.entity.Orders;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
+import com.ptit.springbootdepartmentstore.repository.OrderRepository;
+import com.ptit.springbootdepartmentstore.repository.ProductRepository;
+import com.ptit.springbootdepartmentstore.repository.UserRepository;
 
 @Component
 public class OrderMapper {
+	
+	@Autowired
+	private ProductRepository productRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 
 	public OrderDTO toDto(Orders order) {
 		OrderDTO ordersDTO = new OrderDTO();
@@ -40,13 +55,17 @@ public class OrderMapper {
 
 	public Orders toEntity(OrderDTO ordersDTO) {
 		Orders order = new Orders();
-		order.setId(ordersDTO.getId());
+		if(ordersDTO.getId() != null)
+			order = orderRepository.findById(ordersDTO.getId())
+						.orElseThrow(() -> new EntityNotFoundException("Order not found in Orders"));
+		else
+			order.setId(ordersDTO.getId());
 		order.setDate(ordersDTO.getDate());
 		order.setStatus(ordersDTO.getStatus());
 		order.setTotalPrice(ordersDTO.getTotalPrice());
 		order.setPaymentMode(ordersDTO.getPaymentMode());
-		User user = new User();
-		user.setId(ordersDTO.getUserId());
+		User user = userRepository.findById(ordersDTO.getUserId())
+						.orElseThrow(() -> new EntityNotFoundException("User not found in Orders"));
 		order.setUser(user);
 
 		List<OrderDetail> orderDetailList = new ArrayList<>();
@@ -54,8 +73,8 @@ public class OrderMapper {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setQuantity(orderDetailDTO.getQuantity());
 			orderDetail.setUnitPrice(orderDetailDTO.getUnitPrice());
-			Product product = new Product();
-			product.setId(orderDetailDTO.getProductId());
+			Product product = productRepository.findById(orderDetailDTO.getProductId())
+									.orElseThrow(() -> new EntityNotFoundException("Product not found in Orders"));
 			OrderDetailId orderDetailId = new OrderDetailId();
 			orderDetailId.setOrder(order);
 			orderDetailId.setProduct(product);

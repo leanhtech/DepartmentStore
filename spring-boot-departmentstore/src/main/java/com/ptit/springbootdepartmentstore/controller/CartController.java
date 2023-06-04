@@ -37,12 +37,12 @@ public class CartController {
 	}
 
 	@PostMapping("/{userId}/{productId}/{quatily}")
-	public CartDTO addToCart(@PathVariable Integer userId, @PathVariable Integer productId, @PathVariable Integer quatily) {
+	public List<CartDTO> addToCart(@PathVariable Integer userId, @PathVariable Integer productId, @PathVariable Integer quatily) {
 		return cartService.addToCart(userId, productId, quatily);
 	}
 
 	@PutMapping("/{userId}/{productId}")
-	public CartDTO updateCart(@PathVariable Integer userId, @PathVariable Integer productId,
+	public List<CartDTO> updateCart(@PathVariable Integer userId, @PathVariable Integer productId,
 			@RequestBody CartDTO cartDTO) {
 		return cartService.updateCart(userId, productId, cartDTO.getQuantity());
 	}
@@ -50,6 +50,11 @@ public class CartController {
 	@DeleteMapping("/{userId}/{productId}")
 	public void deleteCart(@PathVariable Integer userId, @PathVariable Integer productId) {
 		cartService.deleteCart(userId, productId);
+	}
+	
+	@DeleteMapping("/{userId}")
+	public void deleteCartByUser(@PathVariable Integer userId) {
+		cartService.deleteCartByUserId(userId);
 	}
 
 }

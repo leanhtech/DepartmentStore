@@ -41,6 +41,11 @@ public class ProductService {
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
 		return productMapper.toDTO(product);
 	}
+	
+	public List<ProductDTO> getListRecommendedProduct() {
+		List<Product> list = productRepository.findFirst8ByOrderBySold();
+		return productMapper.toListDTO(list);
+	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public ProductDTO createProduct(ProductDTO productDTO) {

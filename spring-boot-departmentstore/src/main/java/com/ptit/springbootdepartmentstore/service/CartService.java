@@ -64,7 +64,7 @@ public class CartService {
     }
 
 
-    public CartDTO addToCart(Integer userId, Integer productId, Integer quantity) {
+    public List<CartDTO> addToCart(Integer userId, Integer productId, Integer quantity) {
         User user = userRepository.findById(userId).orElse(null);
         Product product = productRepository.findById(productId).orElse(null);
 
@@ -77,7 +77,7 @@ public class CartService {
                 Cart cart = cartMapper.toEntity(existingCartDTO, user, product);
                 Cart savedCart = cartRepository.save(cart);
                 CartDTO savedCartDTO = cartMapper.toDTO(savedCart);
-                return savedCartDTO;
+                return getAllByIdUser(userId);
             } else {
                 CartDTO cartDTO = new CartDTO();
                 cartDTO.setUserId(userId);
@@ -86,14 +86,14 @@ public class CartService {
                 Cart cart = cartMapper.toEntity(cartDTO, user, product);
                 Cart savedCart = cartRepository.save(cart);
                 CartDTO savedCartDTO = cartMapper.toDTO(savedCart);
-                return savedCartDTO;
+                return getAllByIdUser(userId);
             }
         }
 
         return null;
     }
 
-    public CartDTO updateCart(Integer userId, Integer productId, Integer quantity) {
+    public List<CartDTO> updateCart(Integer userId, Integer productId, Integer quantity) {
         User user = userRepository.findById(userId).orElse(null);
         Product product = productRepository.findById(productId).orElse(null);
 
@@ -104,7 +104,7 @@ public class CartService {
                 existingCartDTO.setQuantity(quantity);
                 Cart cart = cartMapper.toEntity(existingCartDTO, user, product);
                 Cart savedCart = cartRepository.save(cart);
-                return cartMapper.toDTO(savedCart);
+                return getAllByIdUser(userId);
             }
         }
         return null;
@@ -120,6 +120,13 @@ public class CartService {
             cartId.setProduct(product);
             cartRepository.deleteById(cartId);
         }
+    }
+    
+    public void deleteCartByUserId(Integer userId) {
+    	List<Cart> carts = cartRepository.findByIdUserId(userId);
+    	for(Cart cart: carts) {
+            cartRepository.deleteById(cart.getId());
+    	}
     }
                 
 }

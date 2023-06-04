@@ -30,6 +30,11 @@ public class ProductController {
 	public List<ProductDTO> getAllProducts() {
 		return productService.getAllProducts();
 	}
+	
+	@GetMapping("/recommended")
+	public List<ProductDTO> getRecommendedProducts() {
+		return productService.getListRecommendedProduct();
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> getProduct(@PathVariable int id) {
@@ -37,6 +42,8 @@ public class ProductController {
 		if (productDTO == null) {
 			return ResponseEntity.notFound().build();
 		}
+		List<ProductDTO> list = productService.getListRecommendedProduct();
+		productDTO.setRecommended(list);
 		return ResponseEntity.ok(productDTO);
 	}
 

@@ -23,6 +23,9 @@ public class AddressService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private MailService mailService;
 
 	@Autowired
 	private AddressMapper addressMapper;
@@ -38,6 +41,7 @@ public class AddressService {
 	}
 	
 	public List<AddressDTO> getAllAddress() {
+		mailService.sendSimpleEmail("katoritakuofficial@gmail.com", "Test Mail", "Alo dang lay list address");
 		return addressMapper.toListDTO(addressRepository.findAll());
 	}
 
