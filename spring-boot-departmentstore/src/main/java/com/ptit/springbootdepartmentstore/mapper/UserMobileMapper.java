@@ -50,7 +50,7 @@ public class UserMobileMapper {
 		userDTO.setPhone(user.getPhone());
 		userDTO.setCreateDate(user.getCreateDate());
 		userDTO.setStatus(user.getStatus());
-		if (user.getAddressList() != null) {
+		if (user.getAddressList() != null || user.getAddressList().size() > 0) {
 //			List<AddressDTO> listAddress = user.getAddressList().stream().map(this::addressMapper.toDTO)
 //					.collect(Collectors.toList());
 			AddressDTO addressDTO = addressMapper.toDTO(user.getAddressList().get(0));

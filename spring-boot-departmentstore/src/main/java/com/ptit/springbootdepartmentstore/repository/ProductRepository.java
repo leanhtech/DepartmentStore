@@ -10,4 +10,6 @@ import com.ptit.springbootdepartmentstore.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 	
 	List<Product> findFirst8ByOrderBySold();
+	
+	List<Product> findTop3ByOrderByQuantity();
 }

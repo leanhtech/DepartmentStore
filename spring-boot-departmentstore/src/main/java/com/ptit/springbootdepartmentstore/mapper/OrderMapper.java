@@ -2,6 +2,7 @@ package com.ptit.springbootdepartmentstore.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -84,5 +85,9 @@ public class OrderMapper {
 		order.setOrderDetailList(orderDetailList);
 
 		return order;
+	}
+	
+	public List<OrderDTO> toListDTO(List<Orders> orders) {
+		return orders.stream().map(this::toDto).collect(Collectors.toList());
 	}
 }

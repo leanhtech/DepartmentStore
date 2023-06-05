@@ -37,7 +37,8 @@ public class CategoryMapper {
 		category.setId(categoryDTO.getId());
 		category.setName(categoryDTO.getName());
 		category.setNote(categoryDTO.getNote());
-		category.setImageByte(ImageRepository.decodeImageUrl(categoryDTO.getImageBase64()));
+		if(categoryDTO.getImageBase64() != null)
+			category.setImageByte(ImageRepository.decodeImageUrl(categoryDTO.getImageBase64()));
 		return category;
 	}
 	

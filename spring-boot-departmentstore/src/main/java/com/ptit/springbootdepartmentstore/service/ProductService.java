@@ -65,7 +65,8 @@ public class ProductService {
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
 		
 		Product product = productMapper.toEntity(productDTO);
-		product.setImageByte(productOld.getImageByte());
+		if(productDTO.getImageBase64() == null)
+			product.setImageByte(productOld.getImageByte());
 		Product savedProduct = productRepository.save(product);
 		return productMapper.toDTO(savedProduct);
 	}

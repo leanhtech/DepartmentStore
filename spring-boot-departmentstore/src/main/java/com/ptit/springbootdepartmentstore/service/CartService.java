@@ -115,10 +115,13 @@ public class CartService {
         Product product = productRepository.findById(productId).orElse(null);
 
         if (user != null && product != null) {
-            CartId cartId = new CartId();
-            cartId.setUser(user);
-            cartId.setProduct(product);
-            cartRepository.deleteById(cartId);
+            List<Cart> list = cartRepository.findByIdUserId(userId);
+            for(Cart cart: list) {
+            	if(cart.getId().getProduct().getId().equals(productId)) {
+            		cartRepository.delete(cart);
+            		return;
+            	}
+            }
         }
     }
     

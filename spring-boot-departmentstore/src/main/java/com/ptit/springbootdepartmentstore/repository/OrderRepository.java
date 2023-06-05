@@ -10,4 +10,8 @@ import com.ptit.springbootdepartmentstore.entity.Orders;
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
 	public List<Orders> findByUserId(Integer userId);
+	
+	public List<Orders> findTop3ByOrderByDateDesc();
+	
+	public List<Orders> findTop3ByStatusOrderByDateDesc(String orderStatus);
 }
