@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.CategoryDTO;
 import com.ptit.springbootdepartmentstore.entity.Category;
-import com.ptit.springbootdepartmentstore.mapper.CategoryMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.CategoryMapper;
 import com.ptit.springbootdepartmentstore.repository.CategoryRepository;
 
 @Service
@@ -21,13 +25,17 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@Autowired
-	private CategoryMapper categoryMapper;
+//	@Autowired
+//	private CategoryMapper categoryMapper;
+	
+    private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper categoryMapper = mapperFactory.Choose(ConstantMapper.CATEGORY);
 
 	public CategoryDTO getCategory(int id) {
 		Category category = categoryRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Category not found in get Category"));
-		return categoryMapper.toDTO(category);
+		return (CategoryDTO) categoryMapper.toDTO(category);
 	}
 
 	public List<CategoryDTO> getCategoryList() {
@@ -36,7 +44,7 @@ public class CategoryService {
 
 	@Transactional(rollbackOn = Exception.class)
 	public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
-		Category category = categoryMapper.toEntity(categoryDTO);
+		Category category = (Category) categoryMapper.toEntity(categoryDTO);
 		categoryRepository.save(category);
 		return categoryDTO;
 	}

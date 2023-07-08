@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +11,7 @@ import com.ptit.springbootdepartmentstore.entity.Cart;
 import com.ptit.springbootdepartmentstore.entity.CartId;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 
 @Component
 public class CartMapper implements Mapper<Cart, CartDTO>{

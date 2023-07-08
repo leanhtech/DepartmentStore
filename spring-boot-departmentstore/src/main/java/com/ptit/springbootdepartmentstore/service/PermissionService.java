@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.PermissionDTO;
 import com.ptit.springbootdepartmentstore.entity.Permission;
-import com.ptit.springbootdepartmentstore.mapper.PermissionMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.PermissionMapper;
 import com.ptit.springbootdepartmentstore.repository.PermissionRepository;
 
 @Service
@@ -21,8 +25,12 @@ public class PermissionService {
 	@Autowired
 	private PermissionRepository permissionRepository;
 	
-	@Autowired
-	private PermissionMapper permissionMapper;
+//	@Autowired
+//	private PermissionMapper permissionMapper;
+	
+    private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper permissionMapper = mapperFactory.Choose(ConstantMapper.PERMISSION);
 
 //	public PermissionDTO convertToPermissionDTO(Permission permission) {
 //		PermissionDTO permissionDTO = new PermissionDTO();
@@ -51,7 +59,7 @@ public class PermissionService {
 	public PermissionDTO getPermission(int id) {
 		Permission permission = permissionRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Permission not found"));
-		return permissionMapper.toDTO(permission);
+		return (PermissionDTO) permissionMapper.toDTO(permission);
 	}
 
 	public List<PermissionDTO> getListPermission() {
@@ -60,7 +68,7 @@ public class PermissionService {
 
 	@Transactional(rollbackOn = Exception.class)
 	public void savePermission(PermissionDTO permissionDTO) {
-		Permission permission = permissionMapper.toEntity(permissionDTO);
+		Permission permission = (Permission) permissionMapper.toEntity(permissionDTO);
 		permissionRepository.save(permission);
 	}
 

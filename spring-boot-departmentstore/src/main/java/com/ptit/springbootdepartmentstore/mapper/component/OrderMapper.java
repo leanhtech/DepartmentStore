@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.ptit.springbootdepartmentstore.entity.OrderDetailId;
 import com.ptit.springbootdepartmentstore.entity.Orders;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 import com.ptit.springbootdepartmentstore.repository.OrderRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;

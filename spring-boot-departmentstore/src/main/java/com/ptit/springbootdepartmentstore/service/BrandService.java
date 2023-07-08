@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.BrandDTO;
 import com.ptit.springbootdepartmentstore.entity.Brand;
-import com.ptit.springbootdepartmentstore.mapper.BrandMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.BrandMapper;
 import com.ptit.springbootdepartmentstore.repository.BrandRepository;
 
 @Service
@@ -20,9 +24,12 @@ public class BrandService {
 	@Autowired
 	private BrandRepository brandRepository;
 	
-	@Autowired
-	private BrandMapper brandMapper;
+//	@Autowired
+//	private BrandMapper brandMapper;
 
+	private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper brandMapper = mapperFactory.Choose(ConstantMapper.BRAND);
 //	public BrandDTO convertToBrandDTO(Brand brand) {
 //		return new BrandDTO(brand.getId(), brand.getName(), brand.getDescipttion());
 //	}
@@ -44,12 +51,12 @@ public class BrandService {
 
 	public BrandDTO getBrand(int id) {
 		Brand brand = brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Brand not found"));
-		return brandMapper.toDTO(brand);
+		return (BrandDTO) brandMapper.toDTO(brand);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public void saveBrand(BrandDTO brandDTO) {
-		Brand brand = brandMapper.toEntity(brandDTO);
+		Brand brand = (Brand) brandMapper.toEntity(brandDTO);
 		brandRepository.save(brand);
 	}
 
@@ -60,6 +67,6 @@ public class BrandService {
 		brand.setName(brandDTO.getName());
 		brand.setDescipttion(brandDTO.getDescipttion());
 		brandRepository.save(brand);
-		return brandMapper.toDTO(brand);
+		return (BrandDTO) brandMapper.toDTO(brand);
 	}
 }

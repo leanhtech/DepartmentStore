@@ -1,6 +1,6 @@
 package com.ptit.springbootdepartmentstore.mapper;
 
-public class Constant {
+public class ConstantMapper {
 	
 	public static final int ADDRESS = 1;
 	

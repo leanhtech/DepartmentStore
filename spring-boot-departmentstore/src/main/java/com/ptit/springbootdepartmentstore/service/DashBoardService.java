@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.DashBoardDTO;
-import com.ptit.springbootdepartmentstore.mapper.OrderMapper;
-import com.ptit.springbootdepartmentstore.mapper.ProductMapper;
+import com.ptit.springbootdepartmentstore.mapper.component.OrderMapper;
+import com.ptit.springbootdepartmentstore.mapper.component.ProductMapper;
 import com.ptit.springbootdepartmentstore.repository.OrderRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 

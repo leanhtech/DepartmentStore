@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.BrandDTO;
 import com.ptit.springbootdepartmentstore.entity.Brand;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component

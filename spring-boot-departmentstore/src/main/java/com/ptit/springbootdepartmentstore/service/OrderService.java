@@ -11,7 +11,11 @@ import com.ptit.springbootdepartmentstore.entity.OrderDetail;
 import com.ptit.springbootdepartmentstore.entity.Orders;
 import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
-import com.ptit.springbootdepartmentstore.mapper.OrderMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.OrderMapper;
 import com.ptit.springbootdepartmentstore.repository.OrderRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
@@ -27,18 +31,22 @@ public class OrderService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private OrderMapper orderMapper;
+//	@Autowired
+//	private OrderMapper orderMapper;
 	
 	@Autowired
 	private MailService mailService;
+	
+    private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper orderMapper = mapperFactory.Choose(ConstantMapper.ORDER);
 
 	public List<OrderDTO> getAllOrders() {
 		List<Orders> orders = orderRepository.findAll();
 		List<OrderDTO> ordersDTOList = new ArrayList<>();
 
 		for (Orders order : orders) {
-			OrderDTO ordersDTO = orderMapper.toDTO(order);
+			OrderDTO ordersDTO = (OrderDTO) orderMapper.toDTO(order);
 			ordersDTOList.add(ordersDTO);
 		}
 
@@ -51,7 +59,7 @@ public class OrderService {
 		List<OrderDTO> ordersDTOList = new ArrayList<>();
 
 		for (Orders order : orders) {
-			OrderDTO ordersDTO = orderMapper.toDTO(order);
+			OrderDTO ordersDTO = (OrderDTO) orderMapper.toDTO(order);
 			ordersDTOList.add(ordersDTO);
 		}
 
@@ -61,7 +69,7 @@ public class OrderService {
 	public OrderDTO getOrderById(Integer id) {
 		Orders order = orderRepository.findById(id).orElse(null);
 		if (order != null) {
-			OrderDTO ordersDTO = orderMapper.toDTO(order);
+			OrderDTO ordersDTO = (OrderDTO) orderMapper.toDTO(order);
 			return ordersDTO;
 		} else {
 			return null;
@@ -69,7 +77,7 @@ public class OrderService {
 	}
 
 	public OrderDTO addOrder(OrderDTO ordersDTO) {
-		Orders order = orderMapper.toEntity(ordersDTO);
+		Orders order = (Orders) orderMapper.toEntity(ordersDTO);
 		User user = userRepository.findById(ordersDTO.getUserId()).orElse(null);
 		if (user != null) {
 			order.setUser(user);
@@ -95,14 +103,14 @@ public class OrderService {
 					"Username : " + savedOrder.getUser().getName() + 
 					" And ID Order : " + String.valueOf(savedOrder.getId()) +
 					" And Status : " + savedOrder.getStatus());
-		OrderDTO savedOrderDTO = orderMapper.toDTO(savedOrder);
+		OrderDTO savedOrderDTO = (OrderDTO) orderMapper.toDTO(savedOrder);
 		return savedOrderDTO;
 	}
 
 	public OrderDTO updateOrder(Integer id, OrderDTO ordersDTO) {
 		Orders order = orderRepository.findById(id).orElse(null);
 		if (order != null) {
-			order = orderMapper.toEntity(ordersDTO);
+			order = (Orders) orderMapper.toEntity(ordersDTO);
 			order.setId(id);
 			User user = userRepository.findById(ordersDTO.getUserId()).orElse(null);
 			if (user != null) {
@@ -129,7 +137,7 @@ public class OrderService {
 						"Username : " + savedOrder.getUser().getName() + 
 						" And ID Order : " + String.valueOf(savedOrder.getId()) +
 						" And Status : " + savedOrder.getStatus());
-			OrderDTO savedOrderDTO = orderMapper.toDTO(savedOrder);
+			OrderDTO savedOrderDTO = (OrderDTO) orderMapper.toDTO(savedOrder);
 			return savedOrderDTO;
 		} else {
 			return null;

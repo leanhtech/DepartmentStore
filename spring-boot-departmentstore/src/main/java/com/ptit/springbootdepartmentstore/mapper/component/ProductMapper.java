@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.ptit.springbootdepartmentstore.dto.ProductDTO;
 import com.ptit.springbootdepartmentstore.entity.Image;
 import com.ptit.springbootdepartmentstore.entity.Product;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 import com.ptit.springbootdepartmentstore.repository.BrandRepository;
 import com.ptit.springbootdepartmentstore.repository.CategoryRepository;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;

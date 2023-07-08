@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.ptit.springbootdepartmentstore.dto.PermissionDTO;
 import com.ptit.springbootdepartmentstore.entity.Permission;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 
 @Component
 public class PermissionMapper implements Mapper<Permission, PermissionDTO>{

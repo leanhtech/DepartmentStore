@@ -12,7 +12,11 @@ import com.ptit.springbootdepartmentstore.dto.ProductDTO;
 import com.ptit.springbootdepartmentstore.entity.Brand;
 import com.ptit.springbootdepartmentstore.entity.Category;
 import com.ptit.springbootdepartmentstore.entity.Product;
-import com.ptit.springbootdepartmentstore.mapper.ProductMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.ProductMapper;
 import com.ptit.springbootdepartmentstore.repository.BrandRepository;
 import com.ptit.springbootdepartmentstore.repository.CategoryRepository;
 import com.ptit.springbootdepartmentstore.repository.ProductRepository;
@@ -29,8 +33,12 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	@Autowired
-	private ProductMapper productMapper;
+//	@Autowired
+//	private ProductMapper productMapper;
+	
+    private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper productMapper = mapperFactory.Choose(ConstantMapper.PRODUCT);
 
 	public List<ProductDTO> getAllProducts() {
 		return productMapper.toListDTO(productRepository.findAll());
@@ -39,7 +47,7 @@ public class ProductService {
 	public ProductDTO getProduct(int id) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
-		return productMapper.toDTO(product);
+		return (ProductDTO) productMapper.toDTO(product);
 	}
 	
 	public List<ProductDTO> getListRecommendedProduct() {
@@ -54,9 +62,9 @@ public class ProductService {
 //			productDTO.setImage("https://w7.pngwing.com/pngs/470/493/png-transparent-new-product-development-sales-industry-business-new-product-text-label-service.png");
 //		}
 		
-		Product product = productMapper.toEntity(productDTO);
+		Product product = (Product) productMapper.toEntity(productDTO);
 		Product savedProduct = productRepository.save(product);
-		return productMapper.toDTO(savedProduct);
+		return (ProductDTO) productMapper.toDTO(savedProduct);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
@@ -64,11 +72,11 @@ public class ProductService {
 		Product productOld = productRepository.findById(productDTO.getId())
 				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
 		
-		Product product = productMapper.toEntity(productDTO);
+		Product product = (Product) productMapper.toEntity(productDTO);
 		if(productDTO.getImageBase64() == null)
 			product.setImageByte(productOld.getImageByte());
 		Product savedProduct = productRepository.save(product);
-		return productMapper.toDTO(savedProduct);
+		return (ProductDTO) productMapper.toDTO(savedProduct);
 	}
 
 	@Transactional(rollbackOn = Exception.class)

@@ -1,4 +1,4 @@
-package com.ptit.springbootdepartmentstore.mapper;
+package com.ptit.springbootdepartmentstore.mapper.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.ptit.springbootdepartmentstore.dto.UserDTO;
 import com.ptit.springbootdepartmentstore.entity.Address;
 import com.ptit.springbootdepartmentstore.entity.User;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
 import com.ptit.springbootdepartmentstore.repository.AddressRepository;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 import com.ptit.springbootdepartmentstore.repository.PermissionRepository;

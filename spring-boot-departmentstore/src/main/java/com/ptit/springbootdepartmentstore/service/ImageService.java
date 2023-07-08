@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.springbootdepartmentstore.dto.ImageDTO;
 import com.ptit.springbootdepartmentstore.entity.Image;
-import com.ptit.springbootdepartmentstore.mapper.ImageMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.ImageMapper;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Service
@@ -19,14 +23,18 @@ public class ImageService {
 	@Autowired
     private ImageRepository imageRepository;
 	
-	@Autowired
-    private ImageMapper imageMapper;
+//	@Autowired
+//    private ImageMapper imageMapper;
+	
+    private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper imageMapper = mapperFactory.Choose(ConstantMapper.IMAGE);
 
 
 	public ImageDTO saveImage(ImageDTO imageDTO) {
-        Image entity = imageMapper.toEntity(imageDTO);
+        Image entity = (Image) imageMapper.toEntity(imageDTO);
         entity = imageRepository.save(entity);
-        return imageMapper.toDTO(entity);
+        return (ImageDTO) imageMapper.toDTO(entity);
     }
 
     public ImageDTO updateImage(ImageDTO imageDTO) {
@@ -34,14 +42,14 @@ public class ImageService {
                 .orElseThrow(() -> new EntityNotFoundException("Image with id " + imageDTO.getId() + " not found"));
         entity.setImageByte(ImageRepository.decodeImageUrl(imageDTO.getImageBase64()));
         entity = imageRepository.save(entity);
-        return imageMapper.toDTO(entity);
+        return (ImageDTO) imageMapper.toDTO(entity);
     }
 
     public void deleteImage(Integer id) {
         imageRepository.deleteById(id);
     }
 
-    public List<ImageDTO> findImagesByIds(List<Integer> ids) {
+    public List<Object> findImagesByIds(List<Integer> ids) {
         return imageRepository.findAllById(ids)
         		.stream()
                 .map(imageMapper::toDTO)

@@ -12,8 +12,12 @@ import org.springframework.stereotype.Service;
 import com.ptit.springbootdepartmentstore.dto.UserDTO;
 import com.ptit.springbootdepartmentstore.dto.UserMobileDTO;
 import com.ptit.springbootdepartmentstore.entity.User;
-import com.ptit.springbootdepartmentstore.mapper.UserMapper;
-import com.ptit.springbootdepartmentstore.mapper.UserMobileMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.ConstantMapper;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.component.UserMapper;
+import com.ptit.springbootdepartmentstore.mapper.component.UserMobileMapper;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
 
 @Service
@@ -22,14 +26,20 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private UserMapper userMapper;
-	
-	@Autowired
-	private UserMobileMapper userMobileMapper;
+//	@Autowired
+//	private UserMapper userMapper;
+//	
+//	@Autowired
+//	private UserMobileMapper userMobileMapper;
 	
 	@Autowired
 	private MailService mailService;
+	
+	private BaseMapperFactory mapperFactory = new MapperFactory();
+
+	private Mapper userMapper = mapperFactory.Choose(ConstantMapper.USER);
+	
+	private Mapper userMobileMapper = mapperFactory.Choose(ConstantMapper.USERMOBILE);
 
 	public List<UserDTO> getAllUser() {
 		List<User> users = userRepository.findAll();
@@ -43,45 +53,45 @@ public class UserService {
 
 	public UserDTO getUser(int id) {
 		User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		return userMapper.toDTO(user);
+		return (UserDTO) userMapper.toDTO(user);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public UserDTO createUser(UserDTO userDTO) {
-		User user = userMapper.toEntity(userDTO);
+		User user = (User) userMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		if(savedUser.getEmail() != null)
 			mailService.sendSimpleEmail(
 					savedUser.getEmail(), 
 					"Wellcome To Online Shop", 
 					"Username : " + savedUser.getName() + " And Password : " + savedUser.getPassword());
-		return userMapper.toDTO(savedUser);
+		return (UserDTO) userMapper.toDTO(savedUser);
 	}
 	
 	@Transactional(rollbackOn = Exception.class)
 	public UserMobileDTO createUserMobile(UserMobileDTO userDTO) {
-		User user = userMobileMapper.toEntity(userDTO);
+		User user = (User) userMobileMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		if(savedUser.getEmail() != null)
 			mailService.sendSimpleEmail(
 					savedUser.getEmail(), 
 					"Wellcome To Online Shop", 
 					"Username : " + savedUser.getName() + " And Password : " + savedUser.getPassword());
-		return userMobileMapper.toDTO(savedUser);
+		return (UserMobileDTO) userMobileMapper.toDTO(savedUser);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public UserDTO updateUser(UserDTO userDTO) {
 		User user = userRepository.findById(userDTO.getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
-		user = userMapper.toEntity(userDTO);
+		user = (User) userMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		if(savedUser.getEmail() != null)
 			mailService.sendSimpleEmail(
 					savedUser.getEmail(), 
 					"Update Account Online Shop", 
 					"Username : " + savedUser.getName() + " And Password : " + savedUser.getPassword());
-		return userMapper.toDTO(savedUser);
+		return (UserDTO) userMapper.toDTO(savedUser);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
@@ -98,7 +108,7 @@ public class UserService {
 	public UserDTO authenticate(String name, String password) {
 		User user = userRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("User not found"));
 		if (user.getPassword().equals(password)) {
-			return userMapper.toDTO(user);
+			return (UserDTO) userMapper.toDTO(user);
 		} else {
 			throw new IllegalArgumentException("Invalid password");
 		}

@@ -3,7 +3,7 @@ package com.ptit.springbootdepartmentstore.mapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class BaseMapperFactory {
+public interface BaseMapperFactory{
 
-	public abstract Mapper<?, ?> Choose(Integer choose);
+	public Mapper <?, ?> Choose(Integer choose);
 }
