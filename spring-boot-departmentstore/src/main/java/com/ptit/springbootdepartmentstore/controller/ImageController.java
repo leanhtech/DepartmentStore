@@ -43,8 +43,8 @@ public class ImageController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ImageDTO>> findImagesByIds(@RequestParam List<Integer> ids) {
-        List<ImageDTO> images = imageService.findImagesByIds(ids);
+    public ResponseEntity<List<Object>> findImagesByIds(@RequestParam List<Integer> ids) {
+        List<Object> images = imageService.findImagesByIds(ids);
         return ResponseEntity.ok(images);
    }
 }
