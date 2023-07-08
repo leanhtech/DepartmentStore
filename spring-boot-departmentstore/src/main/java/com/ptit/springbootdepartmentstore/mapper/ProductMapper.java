@@ -15,7 +15,7 @@ import com.ptit.springbootdepartmentstore.repository.CategoryRepository;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component
-public class ProductMapper {
+public class ProductMapper implements Mapper<Product, ProductDTO>{
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -26,6 +26,7 @@ public class ProductMapper {
 	@Autowired
 	private ImageRepository imageRepository;
 
+	@Override
 	public ProductDTO toDTO(Product product) {
 		ProductDTO productDTO = new ProductDTO();
 		productDTO.setId(product.getId());
@@ -54,6 +55,7 @@ public class ProductMapper {
 		return productDTO;
 	}
 	
+	@Override
 	public Product toEntity(ProductDTO productDTO) {
 		Product product = new Product();
 		product.setId(productDTO.getId());
@@ -76,11 +78,21 @@ public class ProductMapper {
 			product.setImageByte(ImageRepository.decodeImageUrl(productDTO.getImageBase64()));
 		return product;
 	}
-	
-	public List<ProductDTO> toListDTO (List<Product> products) {
-		return products.stream()
-				.map(this::toDTO)
-				.collect(Collectors.toList());
+
+	@Override
+	public List<ProductDTO> toListDTO(List<? extends Product> listEntity) {
+		return listEntity
+    			.stream()
+    			.map(this::toDTO)
+    			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Product> toListEntity(List<? extends ProductDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
 	}
 	
 }

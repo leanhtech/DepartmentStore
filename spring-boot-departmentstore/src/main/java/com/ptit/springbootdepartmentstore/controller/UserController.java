@@ -81,4 +81,9 @@ public class UserController {
 		// TODO: destroy session and log out user
 		return ResponseEntity.ok().build();
 	}
+	
+	@PostMapping("/forgotpass")
+	public String forgetPassword(@RequestParam String mail) {
+		return "*****" + userService.forgotPassword(mail).substring(5);
+	}
 }

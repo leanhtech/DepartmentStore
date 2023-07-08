@@ -11,7 +11,7 @@ import com.ptit.springbootdepartmentstore.entity.Category;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component
-public class CategoryMapper {
+public class CategoryMapper implements Mapper<Category, CategoryDTO>{
 	
 //	private String generateAvatarUrl(byte[] avatar) {
 //		if (avatar == null) {
@@ -20,6 +20,7 @@ public class CategoryMapper {
 //		return "data:image/png;base64," + Base64.getEncoder().encodeToString(avatar);
 //	}
 	
+	@Override
 	public CategoryDTO toDTO(Category category) {
 		CategoryDTO categoryDTO = new CategoryDTO();
 		categoryDTO.setId(category.getId());
@@ -32,6 +33,7 @@ public class CategoryMapper {
 		return categoryDTO;
 	} 
 	
+	@Override
 	public Category toEntity(CategoryDTO categoryDTO) {
 		Category category = new Category();
 		category.setId(categoryDTO.getId());
@@ -41,11 +43,21 @@ public class CategoryMapper {
 			category.setImageByte(ImageRepository.decodeImageUrl(categoryDTO.getImageBase64()));
 		return category;
 	}
-	
-	public List<CategoryDTO> toListDTO(List<Category> categories) {
-		return categories.stream()
-				.map(this::toDTO)
-				.collect(Collectors.toList());
+
+	@Override
+	public List<CategoryDTO> toListDTO(List<? extends Category> listEntity) {
+		return listEntity
+    			.stream()
+    			.map(this::toDTO)
+    			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Category> toListEntity(List<? extends CategoryDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
 	}
 
 }

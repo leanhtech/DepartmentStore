@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	public List<User> findByStatus(String stats);
 	public List<User> findByPermission(Permission permission);
 	public Optional<User> findByName(String name);
+	public Optional<User> findByEmail(String mail);
 }

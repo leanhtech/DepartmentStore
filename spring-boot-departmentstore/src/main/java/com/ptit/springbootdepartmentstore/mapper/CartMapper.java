@@ -13,11 +13,12 @@ import com.ptit.springbootdepartmentstore.entity.Product;
 import com.ptit.springbootdepartmentstore.entity.User;
 
 @Component
-public class CartMapper {
+public class CartMapper implements Mapper<Cart, CartDTO>{
 	
 	@Autowired
 	private ProductMapper productMapper;
 
+	@Override
     public CartDTO toDTO(Cart cart) {
         CartDTO cartDTO = new CartDTO();
         cartDTO.setUserId(cart.getId().getUser().getId());
@@ -35,11 +36,27 @@ public class CartMapper {
         cart.setQuantity(cartDTO.getQuantity());
         return cart;
     }
-    
-    public List<CartDTO> toListDTO (List<Cart> carts) {
-    	return carts.stream()
+
+	@Override
+	public Cart toEntity(CartDTO dto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CartDTO> toListDTO(List<? extends Cart> listEntity) {
+		return listEntity
+    			.stream()
     			.map(this::toDTO)
     			.collect(Collectors.toList());
-    } 
+	}
+
+	@Override
+	public List<Cart> toListEntity(List<? extends CartDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
+	}
 
 }

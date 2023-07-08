@@ -11,11 +11,12 @@ import com.ptit.springbootdepartmentstore.entity.Brand;
 import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 
 @Component
-public class BrandMapper {
+public class BrandMapper implements Mapper <Brand, BrandDTO>{
 	
 	@Autowired
 	private ImageRepository imageRepository;
 	
+	@Override
 	public BrandDTO toDTO(Brand brand) {
 		BrandDTO brandDTO = new BrandDTO();
 		brandDTO.setId(brand.getId());
@@ -27,6 +28,7 @@ public class BrandMapper {
 		return brandDTO;
 	}
 	
+	@Override
 	public Brand toEntity(BrandDTO brandDTO) {
 		Brand brand = new Brand();
 		brand.setId(brandDTO.getId());
@@ -37,11 +39,21 @@ public class BrandMapper {
 		brand.setDescipttion(brandDTO.getDescipttion());
 		return brand;
 	}
-	
-	public List<BrandDTO> toListDTO(List<Brand> brands) {
-		return brands.stream()
-				.map(this::toDTO)
-				.collect(Collectors.toList());
+
+	@Override
+	public List<BrandDTO> toListDTO(List<? extends Brand> listEntity) {
+		return listEntity
+    			.stream()
+    			.map(this::toDTO)
+    			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Brand> toListEntity(List<? extends BrandDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
 	}
 
 }

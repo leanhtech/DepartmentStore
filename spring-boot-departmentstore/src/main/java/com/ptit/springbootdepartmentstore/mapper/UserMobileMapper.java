@@ -18,7 +18,7 @@ import com.ptit.springbootdepartmentstore.repository.ImageRepository;
 import com.ptit.springbootdepartmentstore.repository.PermissionRepository;
 
 @Component
-public class UserMobileMapper {
+public class UserMobileMapper implements Mapper<User, UserMobileDTO>{
 	
 	@Autowired
 	private AddressRepository addressRepository;
@@ -39,6 +39,7 @@ public class UserMobileMapper {
 //		return "data:image/png;base64," + Base64.getEncoder().encodeToString(avatar);
 //	}
 
+	@Override
 	public UserMobileDTO toDTO(User user) {
 		UserMobileDTO userDTO = new UserMobileDTO();
 		userDTO.setId(user.getId());
@@ -65,6 +66,7 @@ public class UserMobileMapper {
 		return userDTO;
 	}
 
+	@Override
 	public User toEntity(UserMobileDTO userDTO) {
 		User user = new User();
 		if(userDTO.getId() != null)
@@ -113,8 +115,20 @@ public class UserMobileMapper {
 		return user;
 	}
 
-	public List<UserMobileDTO> toListDTO(List<User> users) {
-		return users.stream().map(this::toDTO).collect(Collectors.toList());
+	@Override
+	public List<UserMobileDTO> toListDTO(List<? extends User> listEntity) {
+		return listEntity
+    			.stream()
+    			.map(this::toDTO)
+    			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<User> toListEntity(List<? extends UserMobileDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
 	}
 
 }

@@ -29,13 +29,16 @@ public class OrderService {
 
 	@Autowired
 	private OrderMapper orderMapper;
+	
+	@Autowired
+	private MailService mailService;
 
 	public List<OrderDTO> getAllOrders() {
 		List<Orders> orders = orderRepository.findAll();
 		List<OrderDTO> ordersDTOList = new ArrayList<>();
 
 		for (Orders order : orders) {
-			OrderDTO ordersDTO = orderMapper.toDto(order);
+			OrderDTO ordersDTO = orderMapper.toDTO(order);
 			ordersDTOList.add(ordersDTO);
 		}
 
@@ -48,7 +51,7 @@ public class OrderService {
 		List<OrderDTO> ordersDTOList = new ArrayList<>();
 
 		for (Orders order : orders) {
-			OrderDTO ordersDTO = orderMapper.toDto(order);
+			OrderDTO ordersDTO = orderMapper.toDTO(order);
 			ordersDTOList.add(ordersDTO);
 		}
 
@@ -58,7 +61,7 @@ public class OrderService {
 	public OrderDTO getOrderById(Integer id) {
 		Orders order = orderRepository.findById(id).orElse(null);
 		if (order != null) {
-			OrderDTO ordersDTO = orderMapper.toDto(order);
+			OrderDTO ordersDTO = orderMapper.toDTO(order);
 			return ordersDTO;
 		} else {
 			return null;
@@ -85,7 +88,14 @@ public class OrderService {
 		}
 
 		Orders savedOrder = orderRepository.save(order);
-		OrderDTO savedOrderDTO = orderMapper.toDto(savedOrder);
+		if(savedOrder.getUser().getEmail() != null)
+			mailService.sendSimpleEmail(
+					savedOrder.getUser().getEmail(), 
+					"New Order in Online Shop", 
+					"Username : " + savedOrder.getUser().getName() + 
+					" And ID Order : " + String.valueOf(savedOrder.getId()) +
+					" And Status : " + savedOrder.getStatus());
+		OrderDTO savedOrderDTO = orderMapper.toDTO(savedOrder);
 		return savedOrderDTO;
 	}
 
@@ -112,7 +122,14 @@ public class OrderService {
 			}
 
 			Orders savedOrder = orderRepository.save(order);
-			OrderDTO savedOrderDTO = orderMapper.toDto(savedOrder);
+			if(savedOrder.getUser().getEmail() != null)
+				mailService.sendSimpleEmail(
+						savedOrder.getUser().getEmail(), 
+						"Update Order in Online Shop", 
+						"Username : " + savedOrder.getUser().getName() + 
+						" And ID Order : " + String.valueOf(savedOrder.getId()) +
+						" And Status : " + savedOrder.getStatus());
+			OrderDTO savedOrderDTO = orderMapper.toDTO(savedOrder);
 			return savedOrderDTO;
 		} else {
 			return null;

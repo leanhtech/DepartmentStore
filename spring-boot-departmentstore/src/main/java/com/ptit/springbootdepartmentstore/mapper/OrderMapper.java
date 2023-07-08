@@ -21,7 +21,7 @@ import com.ptit.springbootdepartmentstore.repository.ProductRepository;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
 
 @Component
-public class OrderMapper {
+public class OrderMapper implements Mapper<Orders, OrderDTO>{
 	
 	@Autowired
 	private ProductRepository productRepository;
@@ -32,7 +32,8 @@ public class OrderMapper {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	public OrderDTO toDto(Orders order) {
+	@Override
+	public OrderDTO toDTO(Orders order) {
 		OrderDTO ordersDTO = new OrderDTO();
 		ordersDTO.setId(order.getId());
 		ordersDTO.setDate(order.getDate());
@@ -54,6 +55,7 @@ public class OrderMapper {
 		return ordersDTO;
 	}
 
+	@Override
 	public Orders toEntity(OrderDTO ordersDTO) {
 		Orders order = new Orders();
 		if(ordersDTO.getId() != null)
@@ -86,8 +88,21 @@ public class OrderMapper {
 
 		return order;
 	}
-	
-	public List<OrderDTO> toListDTO(List<Orders> orders) {
-		return orders.stream().map(this::toDto).collect(Collectors.toList());
+
+	@Override
+	public List<OrderDTO> toListDTO(List<? extends Orders> listEntity) {
+		return listEntity
+    			.stream()
+    			.map(this::toDTO)
+    			.collect(Collectors.toList());
 	}
+
+	@Override
+	public List<Orders> toListEntity(List<? extends OrderDTO> listDTO) {
+		return listDTO
+    			.stream()
+    			.map(this::toEntity)
+    			.collect(Collectors.toList());
+	}
+	
 }

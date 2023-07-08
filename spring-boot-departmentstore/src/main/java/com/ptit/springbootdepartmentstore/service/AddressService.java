@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import com.ptit.springbootdepartmentstore.dto.AddressDTO;
 import com.ptit.springbootdepartmentstore.entity.Address;
 import com.ptit.springbootdepartmentstore.mapper.AddressMapper;
+import com.ptit.springbootdepartmentstore.mapper.BaseMapperFactory;
+import com.ptit.springbootdepartmentstore.mapper.Constant;
+import com.ptit.springbootdepartmentstore.mapper.Mapper;
+import com.ptit.springbootdepartmentstore.mapper.MapperFactory;
 import com.ptit.springbootdepartmentstore.repository.AddressRepository;
 import com.ptit.springbootdepartmentstore.repository.UserRepository;
 
@@ -27,8 +31,12 @@ public class AddressService {
 	@Autowired
 	private MailService mailService;
 
-	@Autowired
-	private AddressMapper addressMapper;
+	//@Autowired
+	//private AddressMapper addressMapper;
+	
+	BaseMapperFactory mapperFacory = new MapperFactory();
+	Mapper<Address, AddressDTO> addressMapper = (Mapper<Address, AddressDTO>) mapperFacory.Choose(Constant.ADDRESS);
+	
 
 	public List<String> getListTextAddress(List<AddressDTO> addressDTOs) {
 		return addressDTOs.stream()
